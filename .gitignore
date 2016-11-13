@@ -1,0 +1,13 @@
+# IDEA
+.idea/workspace.xml
+.idea/uiDesigner.xml
+.idea/vcs.xml
+
+# Gradle
+.gradle
+gradlew
+gradlew.bat
+
+# Java
+*.class
+
