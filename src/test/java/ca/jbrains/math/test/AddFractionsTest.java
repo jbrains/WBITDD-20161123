@@ -45,7 +45,7 @@ public class AddFractionsTest {
     public void differentDenominators() throws Exception {
         Assert.assertEquals(
                 new Fraction(3, 4),
-                new Fraction(1, 4).plus(new Fraction(1,2)));
+                new Fraction(1, 4).plus(new Fraction(1, 2)));
     }
 
     public static final class Fraction {
@@ -62,17 +62,10 @@ public class AddFractionsTest {
         }
 
         public Fraction plus(Fraction that) {
-            if (this.denominator != that.denominator) {
-                return new Fraction(
-                        this.numerator * that.denominator + this.denominator * that.numerator,
-                        this.denominator * that.denominator);
-            }
-            else if (this.denominator == 1)
-                return new Fraction(this.numerator + that.numerator);
-            else
-                return new Fraction(
-                        this.numerator + that.numerator,
-                        this.denominator);
+            return new Fraction(
+                    this.numerator * that.denominator
+                            + this.denominator * that.numerator,
+                    this.denominator * that.denominator);
         }
 
         @Override
