@@ -1,41 +1,41 @@
 package ca.jbrains.math.test;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AddFractionsTest {
     @Test
     public void zeroPlusZero() throws Exception {
         Fraction sum = new Fraction(0).plus(new Fraction(0));
-        Assert.assertEquals(0, sum.intValue());
+        Assert.assertEquals(new Fraction(0), sum);
     }
 
     @Test
     public void notZeroPlusZero() throws Exception {
         Fraction sum = new Fraction(5).plus(new Fraction(0));
-        Assert.assertEquals(5, sum.intValue());
+        Assert.assertEquals(new Fraction(5), sum);
     }
 
     @Test
     public void zeroPlusNotZero() throws Exception {
         Fraction sum = new Fraction(0).plus(new Fraction(7));
-        Assert.assertEquals(7, sum.intValue());
+        Assert.assertEquals(new Fraction(7), sum);
     }
 
     @Test
     public void bothNotZeroIntegers() throws Exception {
         Fraction sum = new Fraction(4).plus(new Fraction(8));
-        Assert.assertEquals(12, sum.intValue());
+        Assert.assertEquals(new Fraction(12), sum);
     }
 
     @Test
     public void sameDenominatorAndNotOne() throws Exception {
         final Fraction sum = new Fraction(7, 5).plus(new Fraction(14, 5));
-        Assert.assertEquals(21, sum.getNumerator());
-        Assert.assertEquals(5, sum.getDenominator());
+        Assert.assertEquals(new Fraction(21, 5), sum);
     }
 
-    public static class Fraction {
+    public static final class Fraction {
         private int numerator;
         private int denominator;
 
@@ -57,16 +57,26 @@ public class AddFractionsTest {
                         this.denominator);
         }
 
-        public int intValue() {
-            return numerator;
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof Fraction) {
+                Fraction that = (Fraction) other;
+                return this.numerator * that.denominator
+                        == this.denominator * that.numerator;
+            }
+            else {
+                return false;
+            }
         }
 
-        public int getNumerator() {
-            return numerator;
+        @Override
+        public int hashCode() {
+            return 0;
         }
 
-        public int getDenominator() {
-            return denominator;
+        @Override
+        public String toString() {
+            return String.format("%d/%d", numerator, denominator);
         }
     }
 }
