@@ -1,7 +1,6 @@
 package ca.jbrains.math.test;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class AddFractionsTest {
@@ -35,6 +34,20 @@ public class AddFractionsTest {
         Assert.assertEquals(new Fraction(21, 5), sum);
     }
 
+    @Test
+    public void sameDenominatorAndResultNotInLowestTerms() throws Exception {
+        Assert.assertEquals(
+                new Fraction(1),
+                new Fraction(1, 2).plus(new Fraction(1, 2)));
+    }
+
+    @Test
+    public void differentDenominators() throws Exception {
+        Assert.assertEquals(
+                new Fraction(3, 4),
+                new Fraction(1, 4).plus(new Fraction(1,2)));
+    }
+
     public static final class Fraction {
         private int numerator;
         private int denominator;
@@ -48,12 +61,17 @@ public class AddFractionsTest {
             this.denominator = denominator;
         }
 
-        public Fraction plus(Fraction other) {
-            if (this.denominator == 1)
-                return new Fraction(this.numerator + other.numerator);
+        public Fraction plus(Fraction that) {
+            if (this.denominator != that.denominator) {
+                return new Fraction(
+                        this.numerator * that.denominator + this.denominator * that.numerator,
+                        this.denominator * that.denominator);
+            }
+            else if (this.denominator == 1)
+                return new Fraction(this.numerator + that.numerator);
             else
                 return new Fraction(
-                        this.numerator + other.numerator,
+                        this.numerator + that.numerator,
                         this.denominator);
         }
 
@@ -63,8 +81,7 @@ public class AddFractionsTest {
                 Fraction that = (Fraction) other;
                 return this.numerator * that.denominator
                         == this.denominator * that.numerator;
-            }
-            else {
+            } else {
                 return false;
             }
         }
