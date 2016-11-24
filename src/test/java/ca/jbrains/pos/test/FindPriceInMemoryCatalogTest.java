@@ -1,28 +1,31 @@
 package ca.jbrains.pos.test;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
-public class FindPriceInMemoryCatalogTest {
-    @Test
-    public void productFound() throws Exception {
-        final Price foundPrice = Price.cents(1250);
-        final InMemoryCatalog catalog = new InMemoryCatalog(
-                Collections.singletonMap("12345", foundPrice));
-        Assert.assertEquals(foundPrice, catalog.findPrice("12345"));
+public class FindPriceInMemoryCatalogTest extends FindPriceInCatalogContract {
+
+    @Override
+    protected Catalog catalogWith(String barcode, Price matchingPrice) {
+        return new InMemoryCatalog(
+                new HashMap<String, Price>() {{
+                    put(String.format("Not %s", barcode), Price.cents(1));
+                    put(String.format("Definitely not %s", barcode), Price.cents(2));
+                    put(barcode, matchingPrice);
+                    put(String.format("Still not %s", barcode), Price.cents(3));
+                }});
     }
 
-    @Test
-    public void productNotFound() throws Exception {
-        final InMemoryCatalog catalog = new InMemoryCatalog(
-                Collections.emptyMap());
-        Assert.assertEquals(null, catalog.findPrice("12345"));
+    @Override
+    protected Catalog catalogWithout(String barcodeToAvoid) {
+        return new InMemoryCatalog(new HashMap<String, Price>() {{
+            put(String.format("Not %s", barcodeToAvoid), Price.cents(1));
+            put(String.format("Definitely not %s", barcodeToAvoid), Price.cents(2));
+            put(String.format("Still not %s", barcodeToAvoid), Price.cents(3));
+        }});
     }
 
-    public static class InMemoryCatalog {
+    public static class InMemoryCatalog implements Catalog {
         private final Map<String, Price> pricesByBarcode;
 
         public InMemoryCatalog(Map<String, Price> pricesByBarcode) {
