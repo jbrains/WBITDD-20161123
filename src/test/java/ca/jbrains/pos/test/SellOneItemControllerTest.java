@@ -44,14 +44,14 @@ public class SellOneItemControllerTest {
 
     @Test
     public void emptyBarcode() throws Exception {
-        final Catalog catalog = context.mock(Catalog.class);
         final Display display = context.mock(Display.class);
 
         context.checking(new Expectations() {{
             oneOf(display).displayScannedEmptyBarcodeMessage();
         }});
         
-        final SellOneItemController controller = new SellOneItemController(catalog, display);
+        final SellOneItemController controller
+                = new SellOneItemController(null, display);
         controller.onBarcode("");
     }
 
@@ -81,7 +81,7 @@ public class SellOneItemControllerTest {
                 display.displayScannedEmptyBarcodeMessage();
                 return;
             }
-            
+
             final Price price = catalog.findPrice(barcode);
             if (price == null)
                 display.displayProductNotFoundMessage(barcode);
