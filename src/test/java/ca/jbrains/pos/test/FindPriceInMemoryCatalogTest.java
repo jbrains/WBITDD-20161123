@@ -1,5 +1,8 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Catalog;
+import ca.jbrains.pos.Price;
+
 import java.util.HashMap;
 import java.util.Map;
 

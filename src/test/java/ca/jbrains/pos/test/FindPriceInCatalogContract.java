@@ -1,5 +1,7 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Catalog;
+import ca.jbrains.pos.Price;
 import org.junit.Assert;
 import org.junit.Test;
 
