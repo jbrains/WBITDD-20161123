@@ -16,40 +16,52 @@ import static ca.jbrains.pos.test.Text.lines;
 public class DisplayMessagesToConsole {
     private StringWriter canvas;
     private JUnitRuleMockery context = new JUnitRuleMockery();
+    private MessageFormat messageFormat;
 
     @Before
     public void setUp() throws Exception {
         canvas = new StringWriter();
+        messageFormat = context.mock(MessageFormat.class);
     }
 
     @Test
     public void emptyBarcode() throws Exception {
-        new ConsoleDisplay(canvas, new EnglishLanguageMessageFormat()).displayScannedEmptyBarcodeMessage();
+        context.checking(new Expectations() {{
+            allowing(messageFormat).formatScannedEmptyBarcodeMessage();
+            will(returnValue("::scanned empty barcode message::"));
+        }});
+
+        new ConsoleDisplay(canvas, messageFormat).displayScannedEmptyBarcodeMessage();
 
         Assert.assertEquals(
-                lines("Scanning error: empty barcode"),
+                lines("::scanned empty barcode message::"),
                 lines(canvas.toString()));
     }
 
     @Test
     public void productNotFound() throws Exception {
-        new ConsoleDisplay(canvas, new EnglishLanguageMessageFormat()).displayProductNotFoundMessage("::barcode not found::");
+        context.checking(new Expectations() {{
+            allowing(messageFormat).formatProductNotFoundMessage(with("::barcode not found::"));
+            will(returnValue("::product not found message::"));
+        }});
+
+        new ConsoleDisplay(canvas, messageFormat).displayProductNotFoundMessage("::barcode not found::");
 
         Assert.assertEquals(
-                lines("Product not found for ::barcode not found::"),
+                lines("::product not found message::"),
                 lines(canvas.toString()));
     }
 
     @Test
     public void price() throws Exception {
-        final MessageFormat messageFormat = context.mock(MessageFormat.class);
+        final Price price = Price.cents(795);
 
         context.checking(new Expectations() {{
-            allowing(messageFormat).format(with(any(Price.class)));
+            allowing(messageFormat).format(with(price));
             will(returnValue("::formatted price::"));
         }});
 
-        new ConsoleDisplay(canvas, messageFormat).displayPrice(Price.cents(795));
+        new ConsoleDisplay(canvas, messageFormat).displayPrice(price);
 
         Assert.assertEquals(
                 lines("::formatted price::"),
