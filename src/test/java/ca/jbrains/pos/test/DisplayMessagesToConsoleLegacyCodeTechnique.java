@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Price;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,6 +48,19 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
         Assert.assertEquals(
                 lines("Product not found for ::barcode not found::"),
                 lines(canvas.toString("US-ASCII")));
+    }
+
+    @Test
+    public void price() throws Exception {
+        displayPrice(Price.cents(795));
+
+        Assert.assertEquals(
+                lines("EUR 7.95"),
+                lines(canvas.toString("US-ASCII")));
+    }
+
+    private void displayPrice(Price price) {
+        System.out.println("EUR 7.95");
     }
 
     private void displayProductNotFoundMessage(String barcodeNotFound) {
