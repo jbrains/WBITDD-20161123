@@ -1,6 +1,7 @@
 package ca.jbrains.pos.test;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.PrintWriter;
@@ -10,14 +11,29 @@ import java.io.Writer;
 import static ca.jbrains.pos.test.Text.lines;
 
 public class DisplayMessagesToConsole {
+
+    private StringWriter canvas;
+
+    @Before
+    public void setUp() throws Exception {
+        canvas = new StringWriter();
+    }
+
     @Test
     public void emptyBarcode() throws Exception {
-        final StringWriter canvas = new StringWriter();
-
         new ConsoleDisplay(canvas).displayScannedEmptyBarcodeMessage();
 
         Assert.assertEquals(
                 lines("Scanning error: empty barcode"),
+                lines(canvas.toString()));
+    }
+
+    @Test
+    public void productNotFound() throws Exception {
+        new ConsoleDisplay(canvas).displayProductNotFoundMessage("::barcode not found::");
+
+        Assert.assertEquals(
+                lines("Product not found for ::barcode not found::"),
                 lines(canvas.toString()));
     }
 
@@ -30,6 +46,11 @@ public class DisplayMessagesToConsole {
 
         public void displayScannedEmptyBarcodeMessage() {
             out.println("Scanning error: empty barcode");
+        }
+
+        public void displayProductNotFoundMessage(String barcodeNotFound) {
+            out.println(String.format(
+                    "Product not found for %s", barcodeNotFound));
         }
     }
 }
