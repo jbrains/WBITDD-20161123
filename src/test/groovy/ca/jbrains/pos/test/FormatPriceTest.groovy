@@ -8,7 +8,7 @@ class FormatPriceTest extends Specification {
     @Unroll
     def "format price #price.euro()"() {
         expect:
-        new EnglishLanguageMessageFormat().format(price) == text
+        new EnglishLanguageMessageFormat().formatProductFoundMessage(price) == text
 
         where:
         price                || text

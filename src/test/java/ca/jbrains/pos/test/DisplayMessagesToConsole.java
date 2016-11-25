@@ -57,7 +57,7 @@ public class DisplayMessagesToConsole {
         final Price price = Price.cents(795);
 
         context.checking(new Expectations() {{
-            allowing(messageFormat).format(with(price));
+            allowing(messageFormat).formatProductFoundMessage(with(price));
             will(returnValue("::formatted price::"));
         }});
 
@@ -86,7 +86,7 @@ public class DisplayMessagesToConsole {
         }
 
         public void displayPrice(Price price) {
-            out.println(messageFormat.format(price));
+            out.println(messageFormat.formatProductFoundMessage(price));
         }
     }
 }

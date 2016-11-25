@@ -55,7 +55,7 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
     }
 
     private void displayPrice(Price price) {
-        System.out.println(new EnglishLanguageMessageFormat().format(price));
+        System.out.println(new EnglishLanguageMessageFormat().formatProductFoundMessage(price));
     }
 
     private void displayProductNotFoundMessage(String barcodeNotFound) {
