@@ -12,5 +12,6 @@ class FormatPriceTest extends Specification {
         price             || text
         Price.cents(795)  || "EUR 7.95"
         Price.cents(1265) || "EUR 12.65"
+        Price.cents(850)  || "EUR 8.50"
     }
 }
