@@ -9,7 +9,8 @@ class FormatPriceTest extends Specification {
         new EnglishLanguageMessageFormat().format(price) == text
 
         where:
-        price            || text
-        Price.cents(795) || "EUR 7.95"
+        price             || text
+        Price.cents(795)  || "EUR 7.95"
+        Price.cents(1265) || "EUR 12.65"
     }
 }
