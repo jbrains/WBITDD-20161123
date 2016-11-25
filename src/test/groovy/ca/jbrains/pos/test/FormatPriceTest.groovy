@@ -2,9 +2,11 @@ package ca.jbrains.pos.test
 
 import ca.jbrains.pos.Price
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class FormatPriceTest extends Specification {
-    def "format price #price.euro"() {
+    @Unroll
+    def "format price #price.euro()"() {
         expect:
         new EnglishLanguageMessageFormat().format(price) == text
 
