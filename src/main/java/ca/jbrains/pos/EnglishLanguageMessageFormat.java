@@ -1,6 +1,4 @@
-package ca.jbrains.pos.test;
-
-import ca.jbrains.pos.Price;
+package ca.jbrains.pos;
 
 public class EnglishLanguageMessageFormat implements MessageFormat {
     @Override

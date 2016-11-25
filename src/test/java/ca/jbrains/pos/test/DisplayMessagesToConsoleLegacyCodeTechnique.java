@@ -1,6 +1,8 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.EnglishLanguageMessageFormat;
 import ca.jbrains.pos.Price;
+import ca.jbrains.pos.Text;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

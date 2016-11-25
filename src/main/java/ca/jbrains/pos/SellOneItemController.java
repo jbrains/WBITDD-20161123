@@ -1,6 +1,6 @@
 package ca.jbrains.pos;
 
-public class SellOneItemController {
+public class SellOneItemController implements BarcodeScannedListener {
     private final Catalog catalog;
     private final Display display;
 

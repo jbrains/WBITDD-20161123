@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test
 
+import ca.jbrains.pos.EnglishLanguageMessageFormat
 import ca.jbrains.pos.Price
 import spock.lang.Specification
 import spock.lang.Unroll

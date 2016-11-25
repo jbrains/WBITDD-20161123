@@ -1,15 +1,16 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.MessageFormat;
 import ca.jbrains.pos.Price;
+import ca.jbrains.pos.Text;
+import ca.jbrains.pos.WriterDisplay;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
 
 public class DisplayMessagesToConsole {
     private StringWriter canvas;
@@ -68,25 +69,4 @@ public class DisplayMessagesToConsole {
                 Text.lines(canvas.toString()));
     }
 
-    private static class WriterDisplay {
-        private final PrintWriter out;
-        private final MessageFormat messageFormat;
-
-        public WriterDisplay(Writer canvas, MessageFormat messageFormat) {
-            this.out = new PrintWriter(canvas, true);
-            this.messageFormat = messageFormat;
-        }
-
-        public void displayScannedEmptyBarcodeMessage() {
-            out.println(messageFormat.formatScannedEmptyBarcodeMessage());
-        }
-
-        public void displayProductNotFoundMessage(String barcodeNotFound) {
-            out.println(messageFormat.formatProductNotFoundMessage(barcodeNotFound));
-        }
-
-        public void displayPrice(Price price) {
-            out.println(messageFormat.formatProductFoundMessage(price));
-        }
-    }
 }

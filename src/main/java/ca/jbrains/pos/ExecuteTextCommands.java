@@ -1,4 +1,4 @@
-package ca.jbrains.pos.test;
+package ca.jbrains.pos;
 
 import java.io.BufferedReader;
 import java.io.Reader;
