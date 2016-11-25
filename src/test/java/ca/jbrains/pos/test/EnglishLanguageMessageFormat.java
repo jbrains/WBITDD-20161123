@@ -2,6 +2,9 @@ package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Price;
 
+// REFACTOR Replace the specialized methods with
+// a generic format() method that turns a Template into text?
+// Would Template and UserDisplayMessage fold together?
 public class EnglishLanguageMessageFormat implements MessageFormat {
     @Override
     public String formatProductFoundMessage(Price price) {
