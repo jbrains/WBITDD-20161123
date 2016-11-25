@@ -1,5 +1,6 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Display;
 import ca.jbrains.pos.Price;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -68,7 +69,10 @@ public class DisplayMessagesToConsole {
                 Text.lines(canvas.toString()));
     }
 
-    private static class WriterDisplay {
+    // REFACTOR To replace the Display facade with using
+    // displayUserMessage() directly requires controllers
+    // to change, so I can't replace the facade yet.
+    private static class WriterDisplay implements Display {
         private final PrintWriter out;
         private final MessageFormat messageFormat;
 
@@ -77,16 +81,20 @@ public class DisplayMessagesToConsole {
             this.messageFormat = messageFormat;
         }
 
+        private void displayUserMessage(UserDisplayMessage userDisplayMessage) {
+            out.println(userDisplayMessage.formatWith(messageFormat));
+        }
+
         public void displayScannedEmptyBarcodeMessage() {
-            out.println(messageFormat.formatScannedEmptyBarcodeMessage());
+            displayUserMessage(new ScannedEmptyBarcodeMessage());
         }
 
         public void displayProductNotFoundMessage(String barcodeNotFound) {
-            out.println(messageFormat.formatProductNotFoundMessage(barcodeNotFound));
+            out.println(new ProductNotFoundMessage(barcodeNotFound).formatWith(messageFormat));
         }
 
         public void displayPrice(Price price) {
-            out.println(messageFormat.formatProductFoundMessage(price));
+            out.println(new ProductFoundMessage(price).formatWith(messageFormat));
         }
     }
 }

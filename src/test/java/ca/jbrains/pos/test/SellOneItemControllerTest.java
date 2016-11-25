@@ -53,10 +53,9 @@ public class SellOneItemControllerTest {
         context.checking(new Expectations() {{
             oneOf(display).displayScannedEmptyBarcodeMessage();
         }});
-        
+
         final SellOneItemController controller
                 = new SellOneItemController(null, display);
         controller.onBarcode("");
     }
-
 }
