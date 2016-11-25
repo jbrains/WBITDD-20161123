@@ -8,17 +8,10 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
 
 public class DisplayMessagesToConsoleLegacyCodeTechnique {
     private PrintStream productionStdout;
     private ByteArrayOutputStream canvas;
-
-    // REFACTOR Move this to a reusable library
-    public static List<String> lines(String text) {
-        return Arrays.asList(text.split(System.lineSeparator()));
-    }
 
     @Before
     public void simulateStdout() throws Exception {
@@ -37,8 +30,8 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
         displayScannedEmptyBarcodeMessage();
 
         Assert.assertEquals(
-                lines("Scanning error: empty barcode"),
-                lines(canvas.toString("US-ASCII")));
+                Text.lines("Scanning error: empty barcode"),
+                Text.lines(canvas.toString("US-ASCII")));
     }
 
     @Test
@@ -46,8 +39,8 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
         displayProductNotFoundMessage("::barcode not found::");
 
         Assert.assertEquals(
-                lines("Product not found for ::barcode not found::"),
-                lines(canvas.toString("US-ASCII")));
+                Text.lines("Product not found for ::barcode not found::"),
+                Text.lines(canvas.toString("US-ASCII")));
     }
 
     @Test
@@ -57,8 +50,8 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
         displayPrice(Price.cents(23847600));
 
         Assert.assertEquals(
-                lines("EUR 238476.00"),
-                lines(canvas.toString("US-ASCII")));
+                Text.lines("EUR 238476.00"),
+                Text.lines(canvas.toString("US-ASCII")));
     }
 
     private void displayPrice(Price price) {
