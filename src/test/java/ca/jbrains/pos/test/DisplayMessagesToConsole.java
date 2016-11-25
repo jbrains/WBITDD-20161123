@@ -1,10 +1,7 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.Price;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,7 +10,6 @@ import java.io.Writer;
 import static ca.jbrains.pos.test.Text.lines;
 
 public class DisplayMessagesToConsole {
-
     private StringWriter canvas;
 
     @Before
@@ -39,21 +35,31 @@ public class DisplayMessagesToConsole {
                 lines(canvas.toString()));
     }
 
-    @Ignore("Refactoring")
     @Test
     public void price() throws Exception {
-        new ConsoleDisplay(canvas).displayPrice(Price.cents(795));
+        new ConsoleDisplay(canvas, new MessageFormat() {
+            @Override
+            public String format(Price price) {
+                return "::formatted price::";
+            }
+        }).displayPrice(Price.cents(795));
 
         Assert.assertEquals(
-                lines("EUR 7.95"),
+                lines("::formatted price::"),
                 lines(canvas.toString()));
     }
 
     private static class ConsoleDisplay {
         private final PrintWriter out;
+        private final MessageFormat messageFormat;
 
         public ConsoleDisplay(Writer canvas) {
+            this(canvas, new EnglishLanguageMessageFormat());
+        }
+
+        public ConsoleDisplay(Writer canvas, MessageFormat messageFormat) {
             this.out = new PrintWriter(canvas, true);
+            this.messageFormat = messageFormat;
         }
 
         public void displayScannedEmptyBarcodeMessage() {
@@ -66,6 +72,7 @@ public class DisplayMessagesToConsole {
         }
 
         public void displayPrice(Price price) {
+            out.println(messageFormat.format(price));
         }
     }
 }
