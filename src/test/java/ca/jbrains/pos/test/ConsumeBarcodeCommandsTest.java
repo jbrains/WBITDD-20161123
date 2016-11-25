@@ -45,10 +45,24 @@ public class ConsumeBarcodeCommandsTest {
         consumeBarcodeCommandsFromLines(Arrays.asList());
     }
 
-    private void consumeBarcodeCommands(Reader commandSource) throws IOException {
-        final String line = new BufferedReader(commandSource).readLine();
-        if (line != null)
-            barcodeScannedListener.onBarcode(line);
+    @Test
+    public void several() throws Exception {
+        context.checking(new Expectations() {{
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 1::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 2::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 3::"));
+        }});
+
+        consumeBarcodeCommandsFromLines(Arrays.asList(
+                "::barcode 1::",
+                "::barcode 2::",
+                "::barcode 3::"
+        ));
+    }
+
+    private void consumeBarcodeCommands(Reader commandSource) {
+        new BufferedReader(commandSource).lines()
+                .forEach(barcodeScannedListener::onBarcode);
     }
 
     public interface BarcodeScannedListener {
