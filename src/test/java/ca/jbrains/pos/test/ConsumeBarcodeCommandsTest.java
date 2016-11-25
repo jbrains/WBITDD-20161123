@@ -6,22 +6,22 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class ConsumeBarcodeCommandsTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
+
+    private ExecuteTextCommands executeTextCommands;
     private BarcodeScannedListener barcodeScannedListener;
 
     @Before
     public void setUp() throws Exception {
         barcodeScannedListener = context.mock(BarcodeScannedListener.class);
+        executeTextCommands = new ExecuteTextCommands(barcodeScannedListener);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class ConsumeBarcodeCommandsTest {
     }
 
     private void consumeBarcodeCommandsFromLines(List<String> lines) throws IOException {
-        consumeBarcodeCommands(new StringReader(Text.unlines(lines)));
+        executeTextCommands.consumeBarcodeCommands(new StringReader(Text.unlines(lines)));
     }
 
     @Test
@@ -85,6 +85,7 @@ public class ConsumeBarcodeCommandsTest {
                 ""
         ));
     }
+
     @Test
     public void removeWhitespaceFromBarcodes() throws Exception {
         context.checking(new Expectations() {{
@@ -108,28 +109,5 @@ public class ConsumeBarcodeCommandsTest {
                 "\r\r\r\r\r\r\r\r",
                 ""
         ));
-    }
-
-    private void consumeBarcodeCommands(Reader commandSource) {
-        sanitizeCommands(commandStream(commandSource))
-                .forEach(this::interpretCommand);
-    }
-
-    private void interpretCommand(String command) {
-        barcodeScannedListener.onBarcode(command);
-    }
-
-    private Stream<String> sanitizeCommands(Stream<String> commandStream) {
-        return commandStream
-                .map(String::trim)
-                .filter((line) -> !line.isEmpty());
-    }
-
-    private Stream<String> commandStream(Reader commandSource) {
-        return new BufferedReader(commandSource).lines();
-    }
-
-    public interface BarcodeScannedListener {
-        void onBarcode(String barcode);
     }
 }
