@@ -1,7 +1,7 @@
 package ca.jbrains.pos;
 
 public class Price {
-    public final int centsValue;
+    private final int centsValue;
 
     public Price(int centsValue) {
         this.centsValue = centsValue;
@@ -14,5 +14,9 @@ public class Price {
     @Override
     public String toString() {
         return "a Price";
+    }
+
+    public double euro() {
+        return centsValue / 100.0d;
     }
 }
