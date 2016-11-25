@@ -11,17 +11,17 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import static ca.jbrains.pos.test.Text.lines;
-
 public class DisplayMessagesToConsole {
     private StringWriter canvas;
     private JUnitRuleMockery context = new JUnitRuleMockery();
     private MessageFormat messageFormat;
+    private WriterDisplay writerDisplay;
 
     @Before
     public void setUp() throws Exception {
         canvas = new StringWriter();
         messageFormat = context.mock(MessageFormat.class);
+        writerDisplay = new WriterDisplay(canvas, messageFormat);
     }
 
     @Test
@@ -31,11 +31,11 @@ public class DisplayMessagesToConsole {
             will(returnValue("::scanned empty barcode message::"));
         }});
 
-        new ConsoleDisplay(canvas, messageFormat).displayScannedEmptyBarcodeMessage();
+        writerDisplay.displayScannedEmptyBarcodeMessage();
 
         Assert.assertEquals(
-                lines("::scanned empty barcode message::"),
-                lines(canvas.toString()));
+                Text.lines("::scanned empty barcode message::"),
+                Text.lines(canvas.toString()));
     }
 
     @Test
@@ -45,11 +45,11 @@ public class DisplayMessagesToConsole {
             will(returnValue("::product not found message::"));
         }});
 
-        new ConsoleDisplay(canvas, messageFormat).displayProductNotFoundMessage("::barcode not found::");
+        writerDisplay.displayProductNotFoundMessage("::barcode not found::");
 
         Assert.assertEquals(
-                lines("::product not found message::"),
-                lines(canvas.toString()));
+                Text.lines("::product not found message::"),
+                Text.lines(canvas.toString()));
     }
 
     @Test
@@ -61,18 +61,18 @@ public class DisplayMessagesToConsole {
             will(returnValue("::formatted price::"));
         }});
 
-        new ConsoleDisplay(canvas, messageFormat).displayPrice(price);
+        writerDisplay.displayPrice(price);
 
         Assert.assertEquals(
-                lines("::formatted price::"),
-                lines(canvas.toString()));
+                Text.lines("::formatted price::"),
+                Text.lines(canvas.toString()));
     }
 
-    private static class ConsoleDisplay {
+    private static class WriterDisplay {
         private final PrintWriter out;
         private final MessageFormat messageFormat;
 
-        public ConsoleDisplay(Writer canvas, MessageFormat messageFormat) {
+        public WriterDisplay(Writer canvas, MessageFormat messageFormat) {
             this.out = new PrintWriter(canvas, true);
             this.messageFormat = messageFormat;
         }
@@ -88,6 +88,5 @@ public class DisplayMessagesToConsole {
         public void displayPrice(Price price) {
             out.println(messageFormat.format(price));
         }
-
     }
 }
