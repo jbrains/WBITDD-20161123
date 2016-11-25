@@ -1,7 +1,9 @@
 package ca.jbrains.pos.test;
 
+import ca.jbrains.pos.Price;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.PrintWriter;
@@ -37,6 +39,16 @@ public class DisplayMessagesToConsole {
                 lines(canvas.toString()));
     }
 
+    @Ignore("Refactoring")
+    @Test
+    public void price() throws Exception {
+        new ConsoleDisplay(canvas).displayPrice(Price.cents(795));
+
+        Assert.assertEquals(
+                lines("EUR 7.95"),
+                lines(canvas.toString()));
+    }
+
     private static class ConsoleDisplay {
         private final PrintWriter out;
 
@@ -51,6 +63,9 @@ public class DisplayMessagesToConsole {
         public void displayProductNotFoundMessage(String barcodeNotFound) {
             out.println(String.format(
                     "Product not found for %s", barcodeNotFound));
+        }
+
+        public void displayPrice(Price price) {
         }
     }
 }
