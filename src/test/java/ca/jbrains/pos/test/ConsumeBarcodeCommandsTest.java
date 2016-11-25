@@ -60,8 +60,34 @@ public class ConsumeBarcodeCommandsTest {
         ));
     }
 
+    @Test
+    public void rejectEmptyBarcodes() throws Exception {
+        context.checking(new Expectations() {{
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 1::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 2::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 3::"));
+        }});
+
+        consumeBarcodeCommandsFromLines(Arrays.asList(
+                "",
+                "",
+                "::barcode 1::",
+                "",
+                "",
+                "::barcode 2::",
+                "",
+                "",
+                "",
+                "::barcode 3::",
+                "",
+                "",
+                ""
+        ));
+    }
+
     private void consumeBarcodeCommands(Reader commandSource) {
         new BufferedReader(commandSource).lines()
+                .filter((line) -> !line.isEmpty())
                 .forEach(barcodeScannedListener::onBarcode);
     }
 
