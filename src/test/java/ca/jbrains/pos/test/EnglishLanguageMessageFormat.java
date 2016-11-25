@@ -6,5 +6,4 @@ public class EnglishLanguageMessageFormat {
     public String format(Price price) {
         return String.format("EUR %s", price.euro());
     }
-
 }
