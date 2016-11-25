@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class ConsumeBarcodeCommandsTest {
     @Rule
@@ -84,11 +85,48 @@ public class ConsumeBarcodeCommandsTest {
                 ""
         ));
     }
+    @Test
+    public void removeWhitespaceFromBarcodes() throws Exception {
+        context.checking(new Expectations() {{
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 1::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode\t\t2::"));
+            oneOf(barcodeScannedListener).onBarcode(with("::barcode 3::"));
+        }});
+
+        consumeBarcodeCommandsFromLines(Arrays.asList(
+                "",
+                "    \n     \r      ",
+                "     ::barcode 1::    ",
+                "       \t",
+                "",
+                "\t\t::barcode\t\t2::  \t     \t",
+                "   ",
+                "      ",
+                "",
+                "\t\t\t\t::barcode 3::\t\t\t\t\t\t\t",
+                "",
+                "\r\r\r\r\r\r\r\r",
+                ""
+        ));
+    }
 
     private void consumeBarcodeCommands(Reader commandSource) {
-        new BufferedReader(commandSource).lines()
-                .filter((line) -> !line.isEmpty())
-                .forEach(barcodeScannedListener::onBarcode);
+        sanitizeCommands(commandStream(commandSource))
+                .forEach(this::interpretCommand);
+    }
+
+    private void interpretCommand(String command) {
+        barcodeScannedListener.onBarcode(command);
+    }
+
+    private Stream<String> sanitizeCommands(Stream<String> commandStream) {
+        return commandStream
+                .map(String::trim)
+                .filter((line) -> !line.isEmpty());
+    }
+
+    private Stream<String> commandStream(Reader commandSource) {
+        return new BufferedReader(commandSource).lines();
     }
 
     public interface BarcodeScannedListener {
