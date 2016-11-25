@@ -40,6 +40,20 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
                 lines(canvas.toString("US-ASCII")));
     }
 
+    @Test
+    public void productNotFound() throws Exception {
+        displayProductNotFoundMessage("::barcode not found::");
+
+        Assert.assertEquals(
+                lines("Product not found for ::barcode not found::"),
+                lines(canvas.toString("US-ASCII")));
+    }
+
+    private void displayProductNotFoundMessage(String barcodeNotFound) {
+        System.out.println(
+                String.format("Product not found for %s", barcodeNotFound));
+    }
+
     private void displayScannedEmptyBarcodeMessage() {
         System.out.println("Scanning error: empty barcode");
     }
