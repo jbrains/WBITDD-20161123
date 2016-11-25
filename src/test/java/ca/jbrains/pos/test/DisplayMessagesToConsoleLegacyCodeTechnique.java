@@ -52,15 +52,17 @@ public class DisplayMessagesToConsoleLegacyCodeTechnique {
 
     @Test
     public void price() throws Exception {
-        displayPrice(Price.cents(795));
+        // Look at FormatPriceTest to find the detailed tests
+        // for formatting a price the way we want to display it.
+        displayPrice(Price.cents(23847600));
 
         Assert.assertEquals(
-                lines("EUR 7.95"),
+                lines("EUR 238476.00"),
                 lines(canvas.toString("US-ASCII")));
     }
 
     private void displayPrice(Price price) {
-        System.out.println("EUR 7.95");
+        System.out.println(new EnglishLanguageMessageFormat().format(price));
     }
 
     private void displayProductNotFoundMessage(String barcodeNotFound) {
