@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.List;
 
 public class ConsumeBarcodeCommandsTest {
     @Rule
@@ -28,12 +29,26 @@ public class ConsumeBarcodeCommandsTest {
             oneOf(barcodeScannedListener).onBarcode(with("::barcode::"));
         }});
 
-        consumeBarcodeCommands(new StringReader(Text.unlines(Arrays.asList("::barcode::"))));
+        consumeBarcodeCommandsFromLines(Arrays.asList("::barcode::"));
+    }
+
+    private void consumeBarcodeCommandsFromLines(List<String> lines) throws IOException {
+        consumeBarcodeCommands(new StringReader(Text.unlines(lines)));
+    }
+
+    @Test
+    public void none() throws Exception {
+        context.checking(new Expectations() {{
+            never(barcodeScannedListener).onBarcode(with(any(String.class)));
+        }});
+
+        consumeBarcodeCommandsFromLines(Arrays.asList());
     }
 
     private void consumeBarcodeCommands(Reader commandSource) throws IOException {
-        barcodeScannedListener.onBarcode(
-                new BufferedReader(commandSource).readLine());
+        final String line = new BufferedReader(commandSource).readLine();
+        if (line != null)
+            barcodeScannedListener.onBarcode(line);
     }
 
     public interface BarcodeScannedListener {
