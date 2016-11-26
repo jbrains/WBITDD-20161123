@@ -1,6 +1,6 @@
 package ca.jbrains.pos;
 
-public class InterpretPointOfSaleTextCommand implements InterpretCommand {
+public class InterpretPointOfSaleTextCommand implements InterpretTextCommand {
     public BarcodeScannedListener barcodeScannedListener;
 
     public InterpretPointOfSaleTextCommand(BarcodeScannedListener barcodeScannedListener) {
@@ -8,7 +8,7 @@ public class InterpretPointOfSaleTextCommand implements InterpretCommand {
     }
 
     @Override
-    public void interpretCommand(String command) {
-        barcodeScannedListener.onBarcode(command);
+    public void interpretTextCommand(String textCommand) {
+        barcodeScannedListener.onBarcode(textCommand);
     }
 }
