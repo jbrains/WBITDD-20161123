@@ -18,7 +18,7 @@ public class PointOfSaleTerminal {
                 )
         );
         new ConsumeTextCommands(
-                new ExecutePointOfSaleTextCommands(barcodeScannedListener)
+                new ExecuteSanitizedCommands(new InterpretPointOfSaleTextCommand(barcodeScannedListener), new RemoveWhitespaceFromCommands())
         ).fromReader(new InputStreamReader(System.in));
     }
 }

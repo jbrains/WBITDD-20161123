@@ -1,9 +1,6 @@
 package ca.jbrains.pos.test;
 
-import ca.jbrains.pos.BarcodeScannedListener;
-import ca.jbrains.pos.ConsumeTextCommands;
-import ca.jbrains.pos.ExecutePointOfSaleTextCommands;
-import ca.jbrains.pos.Text;
+import ca.jbrains.pos.*;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
@@ -25,7 +22,7 @@ public class ConsumeBarcodeCommandsTest {
     @Before
     public void setUp() throws Exception {
         barcodeScannedListener = context.mock(BarcodeScannedListener.class);
-        consumeTextCommands = new ConsumeTextCommands(new ExecutePointOfSaleTextCommands(barcodeScannedListener));
+        consumeTextCommands = new ConsumeTextCommands(new ExecuteSanitizedCommands(new InterpretPointOfSaleTextCommand(barcodeScannedListener), new RemoveWhitespaceFromCommands()));
     }
 
     @Test
