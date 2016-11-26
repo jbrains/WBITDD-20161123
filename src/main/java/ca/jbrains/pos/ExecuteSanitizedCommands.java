@@ -6,7 +6,7 @@ public class ExecuteSanitizedCommands implements ExecuteTextCommands {
     private final SanitizeCommandStream sanitizeCommandStream;
     private final InterpretCommand interpretCommand;
 
-    public ExecuteSanitizedCommands(InterpretCommand interpretCommand, SanitizeCommandStream sanitizeCommandStream) {
+    public ExecuteSanitizedCommands(SanitizeCommandStream sanitizeCommandStream, InterpretCommand interpretCommand) {
         this.interpretCommand = interpretCommand;
         this.sanitizeCommandStream = sanitizeCommandStream;
     }

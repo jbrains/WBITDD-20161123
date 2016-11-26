@@ -22,7 +22,7 @@ public class ConsumeBarcodeCommandsTest {
     @Before
     public void setUp() throws Exception {
         barcodeScannedListener = context.mock(BarcodeScannedListener.class);
-        consumeTextCommands = new ConsumeTextCommands(new ExecuteSanitizedCommands(new InterpretPointOfSaleTextCommand(barcodeScannedListener), new RemoveWhitespaceFromCommands()));
+        consumeTextCommands = new ConsumeTextCommands(new ExecuteSanitizedCommands(new RemoveWhitespaceFromCommands(), new InterpretPointOfSaleTextCommand(barcodeScannedListener)));
     }
 
     @Test
