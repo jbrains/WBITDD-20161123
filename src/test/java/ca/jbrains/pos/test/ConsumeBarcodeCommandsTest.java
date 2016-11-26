@@ -1,7 +1,8 @@
 package ca.jbrains.pos.test;
 
 import ca.jbrains.pos.BarcodeScannedListener;
-import ca.jbrains.pos.ExecuteTextCommands;
+import ca.jbrains.pos.ConsumeTextCommands;
+import ca.jbrains.pos.ExecutePointOfSaleTextCommands;
 import ca.jbrains.pos.Text;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -18,13 +19,13 @@ public class ConsumeBarcodeCommandsTest {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    private ExecuteTextCommands executeTextCommands;
+    private ConsumeTextCommands consumeTextCommands;
     private BarcodeScannedListener barcodeScannedListener;
 
     @Before
     public void setUp() throws Exception {
         barcodeScannedListener = context.mock(BarcodeScannedListener.class);
-        executeTextCommands = new ExecuteTextCommands(barcodeScannedListener);
+        consumeTextCommands = new ConsumeTextCommands(new ExecutePointOfSaleTextCommands(barcodeScannedListener));
     }
 
     @Test
@@ -37,7 +38,7 @@ public class ConsumeBarcodeCommandsTest {
     }
 
     private void consumeBarcodeCommandsFromLines(List<String> lines) throws IOException {
-        executeTextCommands.consumeBarcodeCommands(new StringReader(Text.unlines(lines)));
+        consumeTextCommands.fromReader(new StringReader(Text.unlines(lines)));
     }
 
     @Test
